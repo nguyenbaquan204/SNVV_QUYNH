@@ -118,3 +118,72 @@ h1 { font-family: var(--serif); font-weight: 500; letter-spacing: -1.6px; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
+
+
+/* A keepsake-style frame for the shareable QR code. */
+.qr-card {
+  width: min(100%, 300px);
+  margin: 36px auto 0;
+  padding: 22px 22px 18px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(150deg, #fffdfa 0%, #faf0ea 100%);
+  border: 1px solid #e8d8ce;
+  box-shadow: 0 16px 42px rgba(83, 61, 50, .1);
+  color: var(--rose-dark);
+}
+.qr-card::before {
+  content: "♡";
+  position: absolute;
+  top: 12px;
+  right: 17px;
+  color: rgba(199, 107, 114, .6);
+  font: 20px var(--serif);
+}
+.qr-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 90px;
+  height: 90px;
+  right: -54px;
+  bottom: -55px;
+  border: 1px solid rgba(199, 107, 114, .18);
+  border-radius: 50%;
+}
+.qr-card p {
+  margin: 0;
+  color: #a08e84;
+  font: 700 8px/1.5 var(--sans);
+  letter-spacing: 1.35px;
+}
+.qr-card p::after {
+  content: "Giữ lại món quà này";
+  display: block;
+  margin-top: 10px;
+  color: var(--ink);
+  font: 500 21px/1.25 var(--serif);
+  letter-spacing: -.35px;
+}
+.qr-card img {
+  display: block;
+  width: 180px;
+  height: 180px;
+  margin: 17px auto 0;
+  padding: 8px;
+  background: #fffdfa;
+  border: 1px solid #eaded5;
+  box-shadow: 0 5px 16px rgba(83, 61, 50, .07);
+  image-rendering: pixelated;
+}
+.qr-card span {
+  display: block;
+  padding-top: 13px;
+  color: #827775;
+  font: italic 13px/1.6 var(--serif);
+}
+@media (max-width: 700px) {
+  .qr-card { margin-top: 30px; padding: 19px 18px 16px; }
+  .qr-card img { width: 174px; height: 174px; }
+}
