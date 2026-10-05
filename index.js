@@ -19,8 +19,6 @@ const letterSignature = document.querySelector("#letter-signature");
 const wishArea = document.querySelector("#wish-area");
 const showWishButton = document.querySelector("#show-wish");
 const wishForm = document.querySelector("#wish-form");
-const wishInput = document.querySelector("#wish-input");
-const wishResponse = document.querySelector("#wish-response");
 let typingTimer = null;
 
 function celebrate() {
@@ -57,8 +55,6 @@ document.querySelector("#back-to-cover").addEventListener("click", () => {
   letterSignature.hidden = true;
   wishArea.hidden = true;
   wishForm.hidden = true;
-  wishForm.reset();
-  wishResponse.textContent = "";
   showWishButton.setAttribute("aria-expanded", "false");
   showWishButton.textContent = "Gửi anh một điều ước ✨";
   giftScreen.hidden = true;
@@ -92,24 +88,10 @@ showWishButton.addEventListener("click", () => {
   wishForm.hidden = !opening;
   showWishButton.setAttribute("aria-expanded", String(opening));
   showWishButton.textContent = opening ? "Gấp lại điều ước ♡" : "Gửi anh một điều ước ✨";
-  if (opening) wishInput.focus();
-});
-
-wishForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const wish = wishInput.value.trim();
-  wishResponse.textContent = wish
-    ? `Anh ghi nhớ điều ước “${wish}” rồi nhé. Mong tuổi mới sẽ mang điều ấy đến với em. ♡`
-    : "Điều ước bí mật cũng được. Anh chỉ mong em luôn hạnh phúc. ♡";
-  wishForm.hidden = true;
-  showWishButton.setAttribute("aria-expanded", "false");
-  showWishButton.textContent = "Gửi anh một điều ước ✨";
-  wishInput.value = "";
 });
 
 if (window.location.protocol.startsWith("http") && !["localhost", "127.0.0.1"].includes(window.location.hostname)) {
   document.querySelector("#qr-section").hidden = false;
   document.querySelector("#qr-image").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=12&data=${encodeURIComponent(window.location.href)}`;
 }
-
 
