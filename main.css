@@ -303,3 +303,6 @@ h1 { font-family: var(--serif); font-weight: 500; letter-spacing: -1.6px; }
 .primary-button .button-arrow { position: relative; z-index: 1; margin: 0; font-size: 18px; opacity: .78; transition: transform .25s; } .primary-button:hover .button-arrow { transform: translate(3px,-3px); }
 @keyframes button-shimmer { 0%,35% { transform: translateX(-120%); } 65%,100% { transform: translateX(120%); } }
 @media (max-width:700px) { .birthday-balloons { top: 17%; right: 4%; transform: scale(.72); opacity: .82; } .cover-copy::before { margin: 0 auto 17px; } .primary-button { width: min(330px,100%); margin: 0 auto; } .portrait-card::before { left: -17px; top: 13px; } .portrait-card::after { right: -17px; bottom: 28px; width: 50px; height: 50px; } }
+
+.letter-word { display: inline; opacity: 0; filter: blur(4px); translate: 0 5px; animation: letter-word-arrive .42s cubic-bezier(.2,.75,.25,1) forwards; }
+@keyframes letter-word-arrive { to { opacity: 1; filter: blur(0); translate: 0 0; } }
