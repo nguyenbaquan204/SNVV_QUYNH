@@ -10,7 +10,6 @@ const letterLines = [
 const letterText = letterLines.join("\n");
 const coverScreen = document.querySelector("#cover-screen");
 const giftScreen = document.querySelector("#gift-screen");
-const giftIntro = document.querySelector("#gift-intro");
 const envelope = document.querySelector("#open-letter");
 const envelopeHint = document.querySelector("#envelope-hint");
 const letterPaper = document.querySelector("#letter-paper");
@@ -21,16 +20,80 @@ const showWishButton = document.querySelector("#show-wish");
 const wishForm = document.querySelector("#wish-form");
 let typingTimer = null;
 
+function stopLetterTyping() {
+  if (typingTimer !== null) {
+    window.clearTimeout(typingTimer);
+    typingTimer = null;
+  }
+}
+
+function scrollLetterWithReader(force = false) {
+  const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  const bodyRect = letterBody.getBoundingClientRect();
+  const threshold = window.innerHeight - 110;
+  if (force || bodyRect.bottom > threshold) {
+    const amount = force ? bodyRect.top - 32 : bodyRect.bottom - threshold + 26;
+    window.scrollBy({ top: amount, behavior });
+  }
+}
+
+function scrollLetterToStart() {
+  const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  const paperTop = letterPaper.getBoundingClientRect().top;
+  window.scrollBy({ top: paperTop - 28, behavior });
+}
+
+function revealLetter() {
+  const tokens = letterText.match(/\S+|\s+/g) || [];
+  let tokenIndex = 0;
+  let lastScrollAt = 0;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function revealNext() {
+    if (tokenIndex >= tokens.length) {
+      typingTimer = null;
+      letterSignature.hidden = false;
+      wishArea.hidden = false;
+      window.setTimeout(() => wishArea.scrollIntoView({ block: "end", behavior: reducedMotion ? "auto" : "smooth" }), 260);
+      return;
+    }
+
+    const token = tokens[tokenIndex++];
+    if (/^\s+$/.test(token)) {
+      letterBody.append(document.createTextNode(token));
+    } else {
+      const word = document.createElement("span");
+      word.className = "letter-word";
+      word.textContent = token;
+      letterBody.append(word);
+    }
+
+    const now = performance.now();
+    if (now - lastScrollAt > 340) {
+      scrollLetterWithReader();
+      lastScrollAt = now;
+    }
+
+    const pause = reducedMotion ? 0 : (/[,;.!?♡]$/.test(token) ? 120 : 54);
+    typingTimer = window.setTimeout(revealNext, pause);
+  }
+
+  typingTimer = window.setTimeout(() => {
+    scrollLetterToStart();
+    revealNext();
+  }, 180);
+}
+
 function celebrate() {
   const layer = document.querySelector("#confetti-layer");
   const colors = ["#cb7479", "#e3b77d", "#c9a9c2", "#f0d6c4", "#9eaaa0"];
   for (let i = 0; i < 38; i += 1) {
     const piece = document.createElement("i");
     piece.className = "confetti";
-    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.left = (Math.random() * 100) + "%";
     piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDelay = `${Math.random() * 0.55}s`;
-    piece.style.setProperty("--drift", `${Math.random() * 150 - 75}px`);
+    piece.style.animationDelay = (Math.random() * 0.55) + "s";
+    piece.style.setProperty("--drift", (Math.random() * 150 - 75) + "px");
     layer.appendChild(piece);
   }
   window.setTimeout(() => { layer.replaceChildren(); }, 4000);
@@ -44,12 +107,11 @@ document.querySelector("#open-gift").addEventListener("click", () => {
 });
 
 document.querySelector("#back-to-cover").addEventListener("click", () => {
-  window.clearInterval(typingTimer);
-  typingTimer = null;
+  stopLetterTyping();
   envelope.classList.remove("opened");
   envelope.setAttribute("aria-expanded", "false");
   envelopeHint.hidden = false;
-  giftIntro.hidden = false;
+  document.querySelector("#gift-intro").hidden = false;
   letterPaper.hidden = true;
   letterBody.textContent = "";
   letterSignature.hidden = true;
@@ -67,20 +129,10 @@ envelope.addEventListener("click", () => {
   envelope.classList.add("opened");
   envelope.setAttribute("aria-expanded", "true");
   envelopeHint.hidden = true;
-  giftIntro.hidden = true;
+  document.querySelector("#gift-intro").hidden = true;
   letterPaper.hidden = false;
   letterBody.textContent = "";
-  let position = 0;
-  typingTimer = window.setInterval(() => {
-    letterBody.textContent += letterText.charAt(position);
-    position += 1;
-    if (position >= letterText.length) {
-      window.clearInterval(typingTimer);
-      typingTimer = null;
-      letterSignature.hidden = false;
-      wishArea.hidden = false;
-    }
-  }, 22);
+  revealLetter();
 });
 
 showWishButton.addEventListener("click", () => {
@@ -92,6 +144,5 @@ showWishButton.addEventListener("click", () => {
 
 if (window.location.protocol.startsWith("http") && !["localhost", "127.0.0.1"].includes(window.location.hostname)) {
   document.querySelector("#qr-section").hidden = false;
-  document.querySelector("#qr-image").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=12&data=${encodeURIComponent(window.location.href)}`;
+  document.querySelector("#qr-image").src = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=10&color=332c2c&bgcolor=fffdfa&data=" + encodeURIComponent(window.location.href);
 }
-
