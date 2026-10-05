@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./main.css?v=qr-card-2">
+  <link rel="stylesheet" href="./main.css?v=wish-form-1">
 </head>
 <body>
   <main>
@@ -48,12 +48,10 @@
           <div class="wish-area" id="wish-area" hidden>
             <p class="wish-prompt">Đọc đến đây rồi, em có điều gì muốn ước không? ♡</p>
             <button class="wish-button" id="show-wish" type="button" aria-expanded="false">Gửi anh một điều ước ✨</button>
-            <form class="wish-form" id="wish-form" hidden>
-              <label for="wish-input">Tuổi mới em mong điều gì nhất?</label>
-              <div class="wish-entry"><input id="wish-input" maxlength="120" placeholder="Viết điều ước của em…" autocomplete="off"><button type="submit">Gửi ♡</button></div>
-              <small>Điều ước chỉ hiện trên trang này, không gửi đi đâu cả.</small>
-            </form>
-            <p class="wish-response" id="wish-response" aria-live="polite"></p>
+            <div class="wish-form wish-form-embed" id="wish-form" hidden>
+              <iframe title="Gửi điều ước riêng cho anh" src="https://docs.google.com/forms/d/e/1FAIpQLScPqmOxerFWhyOkvsTNzgZfM1ymrVdy5MOUAn0ql9EhdReCZA/viewform?embedded=true" loading="lazy">Đang tải biểu mẫu…</iframe>
+              <small>Điều ước sẽ được lưu riêng và báo về email của anh. ♡</small>
+            </div>
           </div>
           <div class="letter-footer"><span>VIẾT BẰNG TẤT CẢ SỰ CHÂN THÀNH</span><span>♡</span></div>
         </article>
@@ -67,4 +65,3 @@
   <script src="./index.js"></script>
 </body>
 </html>
-
