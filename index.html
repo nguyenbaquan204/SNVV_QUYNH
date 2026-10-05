@@ -65,3 +65,16 @@
   <script src="./index.js"></script>
 </body>
 </html>
+
+<style>
+#letter-paper { position:relative!important; overflow:hidden; background:radial-gradient(ellipse at 0 0,rgba(218,168,125,.28),transparent 34%),radial-gradient(ellipse at 100% 100%,rgba(199,107,114,.2),transparent 34%),repeating-linear-gradient(0deg,rgba(135,105,86,.028) 0 1px,transparent 1px 5px),linear-gradient(140deg,#f7e7d7,#fff8ee 48%,#f5e3dc)!important; border:1px solid #c9a58c!important; box-shadow:0 22px 54px rgba(83,61,50,.16),inset 0 0 0 5px #fff9ef,inset 0 0 0 7px #dfc2aa!important; }
+#letter-paper::before,#letter-paper::after { position:absolute; z-index:0; color:rgba(163,105,83,.55); pointer-events:none; font:26px/1 Georgia,serif; }
+#letter-paper::before { content:"✿  ·  ✧"; top:18px; left:20px; }
+#letter-paper::after { content:"✧  ·  ✿"; right:20px; bottom:18px; }
+#letter-paper > * { position:relative; z-index:1; }
+#letter-paper .letter-heading { border-bottom-color:rgba(172,126,99,.4); color:#946d58; }
+#letter-paper .letter-heading span:last-child { width:31px;height:31px;display:grid;place-items:center;border:1px solid #d9b39e;border-radius:50%;background:#f5dfd5;box-shadow:0 3px 9px rgba(159,80,92,.15); }
+#letter-paper .letter-body { color:#493b39; }
+#letter-paper .letter-signature { padding:12px 0 12px 16px;border-left:2px solid #d5aa92; }
+#letter-paper .wish-area,#letter-paper .letter-footer { border-top-color:rgba(172,126,99,.35); }
+</style>
