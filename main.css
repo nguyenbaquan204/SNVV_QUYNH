@@ -280,3 +280,26 @@ h1 { font-family: var(--serif); font-weight: 500; letter-spacing: -1.6px; }
   .birthday-balloons { top: 34%; right: -22px; transform: scale(.68); opacity: .62; }
   .gift-balloons { top: 128px; left: auto; right: -35px; transform: scale(.65); opacity: .62; }
 }
+
+/* A more celebratory first impression for Quynh’s birthday card. */
+.cover-screen { background: radial-gradient(ellipse at 83% 28%, rgba(231,188,177,.34), transparent 34%), radial-gradient(ellipse at 8% 92%, rgba(215,190,153,.2), transparent 28%), var(--paper); }
+.birthday-balloons { top: 14%; right: 27%; z-index: 0; opacity: .96; }
+.cover-copy, .portrait-card { position: relative; z-index: 1; }
+.cover-copy::before { content: "✦  ·  ♡  ·  ✦"; display: block; width: fit-content; margin: 0 0 20px; padding: 8px 12px; border: 1px solid rgba(199,107,114,.2); border-radius: 99px; background: rgba(255,253,250,.72); color: #bd8b70; font-size: 10px; letter-spacing: 2px; }
+.cover-copy .eyebrow { margin-bottom: 14px; }
+.portrait-card::before { content: "HAPPY BIRTHDAY"; position: absolute; z-index: 2; top: 14px; left: -23px; padding: 7px 12px; transform: rotate(-8deg); background: #c76b72; color: #fffdfa; box-shadow: 0 5px 14px rgba(159,80,92,.2); font: 700 8px var(--sans); letter-spacing: 1.4px; }
+.portrait-card::after { content: "06  ·  10"; position: absolute; right: -22px; bottom: 34px; display: grid; place-items: center; width: 58px; height: 58px; border: 1px solid rgba(199,107,114,.32); border-radius: 50%; background: #fbf5ef; color: var(--rose-dark); font: italic 11px var(--serif); box-shadow: 0 8px 20px rgba(83,61,50,.1); }
+.primary-button { position: relative; display: flex; align-items: center; gap: 14px; width: min(330px,100%); min-height: 72px; height: auto; padding: 11px 17px; overflow: hidden; border: 1px solid rgba(255,255,255,.34); border-radius: 13px; background: linear-gradient(135deg,#cf7b7e,#b85e69 58%,#a94f5d); text-align: left; box-shadow: 0 12px 26px rgba(159,80,92,.23), inset 0 1px 0 rgba(255,255,255,.3); }
+.primary-button::before { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg,transparent 20%,rgba(255,255,255,.2) 48%,transparent 72%); transform: translateX(-120%); animation: button-shimmer 4.5s 1s ease-in-out infinite; }
+.primary-button:hover { background: linear-gradient(135deg,#d78788,#a94f5d); transform: translateY(-4px); box-shadow: 0 17px 34px rgba(159,80,92,.3), inset 0 1px 0 rgba(255,255,255,.35); }
+.primary-button:active { transform: translateY(0) scale(.98); }
+.primary-button .gift-box-icon { position: relative; flex: 0 0 40px; width: 40px; height: 40px; margin: 0; border: 0; border-radius: 11px; background: rgba(255,255,255,.17); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
+.gift-box-icon::before { left: 18px; top: 10px; width: 4px; height: 23px; border: 0; background: #fff5df; }
+.gift-box-icon::after { left: 8px; top: 14px; width: 24px; height: 17px; border: 2px solid #fff5df; border-top-width: 3px; border-radius: 3px; }
+.gift-box-icon i, .gift-box-icon b { position: absolute; z-index: 1; top: 7px; width: 10px; height: 7px; border: 2px solid #fff5df; border-radius: 9px 9px 2px 9px; }
+.gift-box-icon i { left: 13px; transform: rotate(24deg); } .gift-box-icon b { left: 19px; transform: scaleX(-1) rotate(24deg); }
+.button-copy { position: relative; z-index: 1; display: grid; gap: 4px; flex: 1; margin: 0 !important; text-align: left; vertical-align: initial !important; }
+.button-copy strong { color: white; font-size: 14px; font-weight: 700; } .button-copy small { color: rgba(255,248,242,.8); font-size: 10px; font-weight: 400; letter-spacing: .1px; }
+.primary-button .button-arrow { position: relative; z-index: 1; margin: 0; font-size: 18px; opacity: .78; transition: transform .25s; } .primary-button:hover .button-arrow { transform: translate(3px,-3px); }
+@keyframes button-shimmer { 0%,35% { transform: translateX(-120%); } 65%,100% { transform: translateX(120%); } }
+@media (max-width:700px) { .birthday-balloons { top: 17%; right: 4%; transform: scale(.72); opacity: .82; } .cover-copy::before { margin: 0 auto 17px; } .primary-button { width: min(330px,100%); margin: 0 auto; } .portrait-card::before { left: -17px; top: 13px; } .portrait-card::after { right: -17px; bottom: 28px; width: 50px; height: 50px; } }
