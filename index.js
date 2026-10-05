@@ -18,7 +18,88 @@ const letterSignature = document.querySelector("#letter-signature");
 const wishArea = document.querySelector("#wish-area");
 const showWishButton = document.querySelector("#show-wish");
 const wishForm = document.querySelector("#wish-form");
+const musicToggle = document.querySelector("#music-toggle");
 let typingTimer = null;
+let musicContext = null;
+let musicBus = null;
+let musicTimer = null;
+let musicEnabled = false;
+let musicStep = 0;
+
+// A soft, original repeating melody made with Web Audio; no external track or download needed.
+const melody = [523.25, 659.25, 783.99, 659.25, 587.33, 523.25, 440, 392, 523.25, 659.25, 783.99, 880, 783.99, 659.25, 587.33, 523.25];
+const chords = [
+  [130.81, 164.81, 196, 261.63],
+  [110, 130.81, 164.81, 220],
+  [87.31, 130.81, 174.61, 220],
+  [98, 146.83, 196, 246.94]
+];
+
+function setMusicButtonState(enabled) {
+  musicEnabled = enabled;
+  musicToggle.setAttribute("aria-pressed", String(enabled));
+  musicToggle.setAttribute("aria-label", enabled ? "Tắt nhạc nền" : "Bật nhạc nền");
+  musicToggle.querySelector(".music-label").textContent = enabled ? "Tắt nhạc" : "Bật nhạc";
+  musicToggle.classList.toggle("is-playing", enabled);
+}
+
+function playNote(frequency, startAt, duration, volume) {
+  const oscillator = musicContext.createOscillator();
+  const envelope = musicContext.createGain();
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(frequency, startAt);
+  envelope.gain.setValueAtTime(0.0001, startAt);
+  envelope.gain.linearRampToValueAtTime(volume, startAt + 0.12);
+  envelope.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+  oscillator.connect(envelope);
+  envelope.connect(musicBus);
+  oscillator.start(startAt);
+  oscillator.stop(startAt + duration + 0.03);
+}
+
+function playMusicStep() {
+  const startAt = musicContext.currentTime + 0.06;
+  playNote(melody[musicStep % melody.length], startAt, 0.78, 0.065);
+  if (musicStep % 4 === 0) {
+    chords[(musicStep / 4) % chords.length].forEach((frequency) => playNote(frequency, startAt, 2.35, 0.012));
+  }
+  musicStep += 1;
+}
+
+async function startMusic() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+  try {
+    if (!musicContext) {
+      musicContext = new AudioContextClass();
+      musicBus = musicContext.createGain();
+      musicBus.gain.value = 0.0001;
+      musicBus.connect(musicContext.destination);
+    }
+    await musicContext.resume();
+    musicBus.gain.cancelScheduledValues(musicContext.currentTime);
+    musicBus.gain.setTargetAtTime(0.72, musicContext.currentTime, 0.35);
+    musicStep = 0;
+    setMusicButtonState(true);
+    if (musicTimer !== null) window.clearInterval(musicTimer);
+    playMusicStep();
+    musicTimer = window.setInterval(playMusicStep, 650);
+  } catch {
+    setMusicButtonState(false);
+  }
+}
+
+function stopMusic() {
+  if (musicTimer !== null) {
+    window.clearInterval(musicTimer);
+    musicTimer = null;
+  }
+  if (musicContext && musicBus) {
+    musicBus.gain.cancelScheduledValues(musicContext.currentTime);
+    musicBus.gain.setTargetAtTime(0.0001, musicContext.currentTime, 0.08);
+  }
+  setMusicButtonState(false);
+}
 
 function stopLetterTyping() {
   if (typingTimer !== null) {
@@ -104,9 +185,11 @@ document.querySelector("#open-gift").addEventListener("click", () => {
   giftScreen.hidden = false;
   window.scrollTo(0, 0);
   celebrate();
+  void startMusic();
 });
 
 document.querySelector("#back-to-cover").addEventListener("click", () => {
+  stopMusic();
   stopLetterTyping();
   envelope.classList.remove("opened");
   envelope.setAttribute("aria-expanded", "false");
@@ -122,6 +205,11 @@ document.querySelector("#back-to-cover").addEventListener("click", () => {
   giftScreen.hidden = true;
   coverScreen.hidden = false;
   window.scrollTo(0, 0);
+});
+
+musicToggle.addEventListener("click", () => {
+  if (musicEnabled) stopMusic();
+  else void startMusic();
 });
 
 envelope.addEventListener("click", () => {
