@@ -272,3 +272,11 @@ h1 { font-family: var(--serif); font-weight: 500; letter-spacing: -1.6px; }
   .birthday-balloons i:nth-child(4) { animation: balloon-sway 4s .2s ease-in-out infinite reverse; }
 }
 @keyframes balloon-sway { 0%, 100% { translate: 0 3px; rotate: -4deg; } 50% { translate: 5px -9px; rotate: 5deg; } }
+
+/* Keep birthday balloons visible around the portrait on wide screens. */
+.birthday-balloons { right: 0; top: 12%; z-index: 1; }
+.gift-balloons { left: 1%; z-index: 1; }
+@media (max-width: 700px) {
+  .birthday-balloons { top: 34%; right: -22px; transform: scale(.68); opacity: .62; }
+  .gift-balloons { top: 128px; left: auto; right: -35px; transform: scale(.65); opacity: .62; }
+}
